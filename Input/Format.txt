@@ -1,0 +1,9 @@
+﻿[Main points on x] Nx
+[Thickening number per element x] Nx-1
+[Thickening k per element x] Nx-1
+[Main points on y] Ny
+[Thickening number per element y] Ny-1
+[Thickening k per element y] Ny-1
+[Existening elements]
+[Elemets with first condition]
+[Elemets with second condition]
