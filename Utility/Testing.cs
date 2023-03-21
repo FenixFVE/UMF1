@@ -5,24 +5,26 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualBasic.CompilerServices;
 using UMF1.BlockRelaxation;
+using UMF1.Assembly;
 
 namespace UMF1.Utility;
+
 
 public class Testing
 {
     public static void Test0()
     {
-        FileManager.ReadParameters(".\\Input\\test_parameters.txt", out var size, out var relaxation, out var eps, out var maxSteps, out var blockSize);
+        FileManager.ReadParameters(".\\Input\\Tests\\test_parameters.txt", out var size, out var relaxation, out var eps, out var maxSteps, out var blockSize);
         Console.WriteLine($"Relaxation: {relaxation}, Eps: {eps}, Max steps: {maxSteps}, Block_size: {blockSize}\n");
 
         var temporal = Enumerable.Repeat(0.0, size).ToList();
         var xBlock = new List<double>(temporal);
         var F = FileManager.ReadVector(".\\Input\\test_vector_Fa.txt");
-        var matrix = new DiagonalMatrix(".\\Input\\test_matrix_A.txt");
+        var matrix = new DiagonalMatrix(".\\Input\\Tests\\test_matrix_A.txt");
 
         BlockRelaxation.BlockRelaxation.Block(matrix, F, xBlock, relaxation, eps, maxSteps, blockSize, temporal);
         foreach (var x in xBlock) Console.WriteLine(x);
-        FileManager.WriteVector(".\\Output\\test_block_output.txt", xBlock);
+        FileManager.WriteVector(".\\Output\\Tests\\test_block_output.txt", xBlock);
     }
 
     public static void Test1()
@@ -55,9 +57,30 @@ public class Testing
 
         BlockRelaxation.BlockRelaxation.Block(matrix, F, xBlock, relaxation, eps, maxSteps, blockSize, temporal);
         foreach (var x in xBlock) Console.WriteLine(x);
-        FileManager.WriteVector(".\\Output\\test_block_output.txt", xBlock);
+        FileManager.WriteVector(".\\Output\\Tests\\test_block_output.txt", xBlock);
     }
 
+    public static void Test3()
+    {
+        var reader = new StreamReader(".\\Input\\Tests\\test_format.txt");
+        Grid.ReadCoordinates(reader, out var MainPoints, out var tempXPoints);
+        var AllPoints = tempXPoints;
+
+        Console.WriteLine("1 Main points:");
+        foreach (var x in MainPoints) Console.Write(x + " ");
+        Console.WriteLine("\n1 All points");
+        foreach (var x in AllPoints) Console.Write(x + " ");
+        Console.WriteLine();
+
+        Grid.ReadCoordinates(reader, out var MainPoints2, out var tempXPoints2);
+        var AllPoints2 = tempXPoints2;
+
+        Console.WriteLine("2 Main points:");
+        foreach (var x in MainPoints2) Console.Write(x + " ");
+        Console.WriteLine("\n2 All points");
+        foreach (var x in AllPoints2) Console.Write(x + " ");
+        Console.WriteLine();
+    }
 
 }
 

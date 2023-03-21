@@ -1,24 +1,38 @@
 import matplotlib.pyplot as plt
 
-# Read points from file
-points = []
-with open('.\\Input\\Contour.txt', 'r') as f:
-    next(f)
-    for line in f:
-        x, y = line.strip().split(' ')
-        points.append((float(x), float(y)))
+# Define the colors for different labels and line numbers
+point_colors = {'first': 'red', 'second': 'blue', 'inner': 'black', 'outer': 'grey'}
+line_colors = {1: 'red', 2: 'blue'}
 
-# Draw points
-x_vals = [p[0] for p in points]
-x_vals.append(x_vals[0])
-y_vals = [p[1] for p in points]
-y_vals.append(y_vals[0])
-plt.plot(x_vals, y_vals, 'bo-')
+# Read the point data from a file
+with open('DrawGrid.txt') as f:
+    point_data = [line.strip().split() for line in f]
 
-# Draw lines connecting neighboring points
-for i in range(len(points) - 1):
-    p1 = points[i]
-    p2 = points[i+1]
-    plt.plot([p1[0], p2[0]], [p1[1], p2[1]], 'r')
+# Extract the coordinates and labels from the point data
+x = [float(d[0]) for d in point_data]
+y = [float(d[1]) for d in point_data]
+labels = [d[2] for d in point_data]
+
+# Read the line data from a file
+with open('.\\Input\\Tests\\test_conditions.txt', encoding='utf-8-sig') as f:
+    line_data = [line.strip().split() for line in f]
+
+# Extract the coordinates and numbers from the line data
+x0 = [float(d[0]) for d in line_data]
+y0 = [float(d[1]) for d in line_data]
+x1 = [float(d[2]) for d in line_data]
+y1 = [float(d[3]) for d in line_data]
+numbers = [int(d[5]) for d in line_data]
+
+# Plot the points and lines with different colors based on their labels and numbers
+fig, ax = plt.subplots()
+for xi, yi, label in zip(x, y, labels):
+    color = point_colors.get(label, 'black')
+    ax.scatter(xi, yi, color=color)
+
+for x0i, y0i, x1i, y1i, num in zip(x0, y0, x1, y1, numbers):
+    color = line_colors.get(num, 'black')
+    ax.plot([x0i, x1i], [y0i, y1i], color=color)
 
 plt.show()
+
