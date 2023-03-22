@@ -50,6 +50,7 @@ public class Grid
     public Dictionary<int, Point> NumberToCoordinates { get; set; }
 
     public List<int> InnerPoints { get; set; }
+    public List<int> OuterPoints { get; set; }
     public List<BorderPoint> BorderPoints { get; set; }
 
     public int UpPoint(int index)
@@ -260,18 +261,38 @@ public class Grid
 
                 var yMin = Math.Min(p1.y, p2.y);
                 var yMax = Math.Max(p1.y, p2.y);
-                var xMin = Math.Max(p1.x, p2.x);
-                var xMax = Math.Max(p1.x, p2.x);
+                //var xMin = Math.Max(p1.x, p2.x);
+                //var xMax = Math.Max(p1.x, p2.x);
+                //
+                ////if (yMin == yMax && p.y == yMin && xMin <= p.x && p.x <= xMax)
+                ////    return false;
+                ////
+                ////if (xMin == xMax && p.x == xMin && yMin <= p.y && p.y <= yMax)
+                ////    return false;
+                //
+                ////if (yMin <= p.y && p.y <= yMax && p.x <= xMin)
+                ////    numberIntersections++;
+                //
+                //
+                //if (yMin == yMax) continue;
+                //
+                //if (yMin <= p.y && p.y <= yMax && p.x < xMin)
+                //    numberIntersections++;
 
-                if (yMin == yMax && p.y == yMin && xMin <= p.x && p.x <= xMax)
-                    return false;
+                //if (p1.y == p2.y && p2.y == p.y && p.x < p1.x)
+                //    numberIntersections++;
+                //
+                //if (p1.x == p2.x && yMin <= p.y && p.y <= yMax && p.x < p1.x)
+                //    numberIntersections++;
+                //
+                //if(point == 17) Console.WriteLine(numberIntersections);
 
-                if (xMin == xMax && p.x == xMin && yMin <= p.y && p.y <= yMax)
-                    return false;
-
-                if (yMin <= p.y && p.y <= yMax && p.x <= xMin)
+                if ((p1.y > p.y) != (p2.y > p.y) &&
+                    (p.x < (p2.x - p1.x) * (p.y - p1.y) /
+                        (double)(p2.y - p1.y) + p1.x))
+                {
                     numberIntersections++;
-
+                }
             }
 
             return (numberIntersections % 2 == 1);
@@ -302,7 +323,15 @@ public class Grid
         InitializeDictionaries();
 
         var border = ReadBoundaries(boundariesFile);
-        InnerPoints = FindInnerPoints(border);
+        var borderPoints = BorderPoints.Select(p => p.Number).ToList();
+
+        InnerPoints = FindInnerPoints(border).Except(borderPoints).ToList();
+
+        OuterPoints = Enumerable
+            .Range(0, XPoints.Count * YPoints.Count)
+            .Except(InnerPoints)
+            .Except(borderPoints)
+            .ToList();
     }
 
     public void DrawGrid()

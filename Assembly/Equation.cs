@@ -10,22 +10,22 @@ public class Equation
 {
     public static double Lambda(double x, double y) => 1.0;
     public static double Gamma(double x, double y) => 1.0;
-
+    public static double Theta(double x, double y) => 1.0;
     // U
     public static double U(double x, double y)
-        => Math.Pow(x, 2) + Math.Pow(y, 2);
+        => x * x * x + y * y * y;
 
     // dx
     public static double Udx(double x, double y)
-        => 2 * x;
+        => 3 * x * x;
     public static double Udx2(double x, double y)
-        => 2;
+        => 6 * x;
 
     // dy
     public static double Udy(double x, double y)
-        => 2 * y;
+        => 3 * y * y;
     public static double Udy2(double x, double y)
-        => 2;
+        => 6 * y;
 
 
     // F = -Lambda * (Udx2 + Udy2) + Gamma * U
